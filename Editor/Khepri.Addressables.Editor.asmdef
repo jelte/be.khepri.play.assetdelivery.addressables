@@ -1,0 +1,17 @@
+﻿{
+	"name": "Khepri.Addressables.Editor",
+	"references": [
+        "Unity.Addressables",
+        "Unity.Addressables.Editor",
+        "Unity.ResourceManager",
+        "Google.Play.AssetDelivery",
+        "Google.Android.AppBundle.Editor",
+        "Khepri.Addressables"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

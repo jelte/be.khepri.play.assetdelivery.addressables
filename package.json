@@ -1,0 +1,17 @@
+{
+	"name": "be.khepri.pad-addressables",
+	"version": "1.0.0",
+	"displayName": "Addressables Play Asset Delivery",
+	"description": "Provide addressables with support for Play Asset Delivery",
+	"unity": "2018.6",
+	"dependencies":
+	{
+		"com.unity.addressables" : "1.8.4",
+		"com.google.play.assetdelivery": "1.2.0"
+	},
+	"author":
+	{
+		"name" : "Jelte Steijaert",
+		"e-mail": "jelte.steijaert@gmail.com"
+	}
+}
