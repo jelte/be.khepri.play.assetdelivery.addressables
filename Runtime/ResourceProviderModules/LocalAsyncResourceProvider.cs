@@ -3,15 +3,15 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.BundleResourceModules
+namespace Khepri.AddressableAssets.ResourceModules
 {
-    public class LocalBundleAsyncResource : IBundleResourceModule
+    public class LocalAsyncResourceProvider : IResourceProviderModule
     {
         private AssetBundleCreateRequest requestOperation;
         private AssetBundle assetBundle;
         private AssetBundleRequestOptions options;
 
-        public event Action<IBundleResourceModule, bool, Exception> CompletedEvent;
+        public event Action<IResourceProviderModule, bool, Exception> CompletedEvent;
 
         public bool TryBeginOperation(ProvideHandle provideHandle)
         {
@@ -30,7 +30,7 @@ namespace Khepri.AddressableAssets.BundleResourceModules
         
         private void BeginOperation(string path)
         {
-            Debug.LogFormat("[{0}.{1}] path={2}", nameof(LocalBundleAsyncResource), nameof(BeginOperation), path);
+            Debug.LogFormat("[{0}.{1}] path={2}", nameof(LocalAsyncResourceProvider), nameof(BeginOperation), path);
             requestOperation = AssetBundle.LoadFromFileAsync(path, options?.Crc ?? 0);
             requestOperation.completed += LocalRequestOperationCompleted;
         }

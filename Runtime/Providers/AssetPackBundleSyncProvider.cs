@@ -1,27 +1,39 @@
 ﻿using System;
 using System.ComponentModel;
-using Khepri.AddressableAssets.BundleResourceModules;
+using Khepri.AddressableAssets.ResourceModules;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets
+namespace Khepri.AddressableAssets.Providers
 {
-	[DisplayName("Async Asset Pack Bundle Provider")]
-    public class AssetPackBundleAsyncProvider : ResourceProviderBase
+	[DisplayName("Sync Asset Pack Bundle Provider")]
+	public class AssetPackBundleSyncProvider : ResourceProviderBase
     {
+	    public static bool handleSynchronously = false;
+	    
 	    public override void Provide(ProvideHandle providerInterface)
 	    {
-		    new ModularAssetBundleResource(new IBundleResourceModule[]
-	            {
-	                new LocalBundleAsyncResource(),
-	                new AssetPackBundleAsyncResource(),
+		    IResourceProviderModule[] modules = handleSynchronously ? 
+			    
+			    new IResourceProviderModule[]
+			    {
+				    new LocalSyncResourceProvider(),
 #if UNITY_ANDROID
-	                new JarBundleAsyncResource(),
+				    new AssetPackBundleSyncResource(),
 #endif
-	                new WebRequestBundleResource(false),
-	            }
-			).Start(providerInterface);
+				    new WebRequestResourceProvider(true),
+				}:
+			    new IResourceProviderModule[]
+			    {
+				    new LocalAsyncResourceProvider(),
+#if UNITY_ANDROID
+				    new AssetPackBundleAsyncResource(),
+		            new JarBundleAsyncResource(),
+#endif
+				    new WebRequestResourceProvider(false),
+			    };
+		    new ModularAssetBundleResource(modules).Start(providerInterface);
 	    }
 		
 	    public override Type GetDefaultType(IResourceLocation location)

@@ -1,5 +1,5 @@
 ﻿using System;
-using Khepri.AddressableAssets.BundleResourceModules;
+using Khepri.AddressableAssets.ResourceModules;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -9,10 +9,10 @@ namespace Khepri.AddressableAssets
     {
         private ProvideHandle provideHandle;
         
-        private IBundleResourceModule[] modules;
-        private IBundleResourceModule activeModule;
+        private IResourceProviderModule[] modules;
+        private IResourceProviderModule _activeProviderModule;
 
-        public ModularAssetBundleResource(IBundleResourceModule[] modules)
+        public ModularAssetBundleResource(IResourceProviderModule[] modules)
         {
             this.modules = modules;
             foreach (var module in modules)
@@ -21,21 +21,21 @@ namespace Khepri.AddressableAssets
             }
         }
 
-        private void OnCompleted(IBundleResourceModule module, bool status, Exception exception)
+        private void OnCompleted(IResourceProviderModule providerModule, bool status, Exception exception)
         {
             provideHandle.Complete(this, status, exception);
         }
 
         internal void Start(ProvideHandle provideHandle)
         {
-            activeModule = null;
+            _activeProviderModule = null;
             this.provideHandle = provideHandle;
 
             foreach (var module in modules)
             {
                 if (module.TryBeginOperation(provideHandle))
                 {
-                    activeModule = module;
+                    _activeProviderModule = module;
                     return;
                 }
             }
@@ -47,13 +47,13 @@ namespace Khepri.AddressableAssets
 
         public AssetBundle GetAssetBundle()
         {
-            return activeModule?.GetAssetBundle();
+            return _activeProviderModule?.GetAssetBundle();
         }
 
         public void Unload()
         {
-            activeModule?.Unload();
-            activeModule = null;
+            _activeProviderModule?.Unload();
+            _activeProviderModule = null;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Google.Android.AppBundle.Editor;
+using Google.Android.AppBundle.Editor.Internal;
 using Khepri.AddressableAssets.Editor.Settings.GroupSchemas;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
@@ -24,14 +25,25 @@ namespace Khepri.AddressableAssets.Editor
 			{
 				assetPackConfig.AssetPacks.Add(bundle.Name, bundle.CreateAssetPack());
 			}
+			WriteAssetPackConfig(bundles);
 			return assetPackConfig;
 		}
 
-	    internal static IEnumerable<AssetPackBundle> GetBundles(string path)
+	    public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions)
+	    {
+		    if (buildPlayerOptions.target != BuildTarget.Android)
+		    {
+			    return false;
+		    }
+		    return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks());
+	    }
+
+	    internal static AssetPackBundle[] GetBundles(string path)
 	    {
 		    return Directory.GetFiles(path)
 			    .Select(file => new AssetPackBundle(file, GetAssetPackGroupSchema(file)))
-			    .Where(pack => pack.IsValid);
+			    .Where(pack => pack.IsValid)
+			    .ToArray();
 	    }
 
 	    /**
@@ -48,11 +60,11 @@ namespace Khepri.AddressableAssets.Editor
 				.FirstOrDefault();
 		}
 
-		public static void WriteAssetPackConfig()
+		private static void WriteAssetPackConfig(IEnumerable<AssetPackBundle> packBundles)
 		{
-			Debug.LogFormat("[{0}.{1}] target={2}", nameof(AssetPackBuilder), nameof(WriteAssetPackConfig), AssetPackBundleConfig.PATH);
 			AssetPackBundleConfig config = GetOrCreateConfig();
-			config.bundles = GetBundles(Addressables.BuildPath).Select(pack => pack.Name).ToArray();;
+			config.assetPacks = packBundles.Select(pack => pack.Name).ToArray();
+			Debug.LogFormat("[{0}.{1}] bundles={2} path={3}", nameof(AssetPackBuilder), nameof(WriteAssetPackConfig), string.Join(", ", config.assetPacks), AssetPackBundleConfig.PATH);
 			EditorUtility.SetDirty(config);
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();

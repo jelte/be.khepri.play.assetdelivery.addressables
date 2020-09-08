@@ -2,7 +2,6 @@
 using Google.Android.AppBundle.Editor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
-using PlayAssetPackDeliveryMode = Google.Android.AppBundle.Editor.AssetPackDeliveryMode;
 
 namespace Khepri.AddressableAssets.Editor.Settings.GroupSchemas
 {
@@ -16,7 +15,7 @@ namespace Khepri.AddressableAssets.Editor.Settings.GroupSchemas
         {
             return new AssetPack
             {
-                DeliveryMode = (PlayAssetPackDeliveryMode) deliveryMode,
+                DeliveryMode = deliveryMode,
                 AssetBundleFilePath = bundle
             };
         }

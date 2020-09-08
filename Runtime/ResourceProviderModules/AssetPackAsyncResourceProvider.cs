@@ -5,11 +5,11 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.BundleResourceModules
+namespace Khepri.AddressableAssets.ResourceModules
 {
-    public class AssetPackBundleAsyncResource : IBundleResourceModule
+    public class AssetPackAsyncResourceProvider : IResourceProviderModule
     {
-        public event Action<IBundleResourceModule, bool, Exception> CompletedEvent;
+        public event Action<IResourceProviderModule, bool, Exception> CompletedEvent;
         
         private PlayAssetPackRequest playAssetPackRequest;
         private AsyncOperation requestOperation;
@@ -23,7 +23,7 @@ namespace Khepri.AddressableAssets.BundleResourceModules
                 return false;
             }
             string assetPackName = Path.GetFileNameWithoutExtension(path);
-            if (!AssetPackBundleConfig.IsAssetPackBundle(assetPackName))
+            if (!AssetPackBundleConfig.IsPack(assetPackName))
             {
                 return false;
             }
@@ -39,7 +39,7 @@ namespace Khepri.AddressableAssets.BundleResourceModules
         
         private void BeginOperation(string assetPackName)
         {
-            Debug.LogFormat("[{0}.{1}] assetPackName={2}", nameof(AssetPackBundleAsyncResource), nameof(BeginOperation), assetPackName);
+            Debug.LogFormat("[{0}.{1}] assetPackName={2}", nameof(AssetPackAsyncResourceProvider), nameof(BeginOperation), assetPackName);
             playAssetPackRequest = PlayAssetDelivery.RetrieveAssetPackAsync(assetPackName);
             playAssetPackRequest.Completed += request => OnPlayAssetPackRequestCompleted(assetPackName, request);
         }
