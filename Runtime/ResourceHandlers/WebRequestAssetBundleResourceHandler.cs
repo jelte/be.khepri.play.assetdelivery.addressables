@@ -6,11 +6,11 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.ResourceManagement.Util;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.ResourceModules
+namespace Khepri.AddressableAssets.ResourceHandlers
 {
-    public class WebRequestResourceProvider : IResourceProviderModule
+    public class WebRequestAssetBundleResourceHandler : IAssetBundleResourceHandler
     {
-        public event Action<IResourceProviderModule, bool, Exception> CompletedEvent;
+        public event Action<IAssetBundleResourceHandler, bool, Exception> CompletedEvent;
 
         public bool handleSynchronously = false; 
         
@@ -23,7 +23,9 @@ namespace Khepri.AddressableAssets.ResourceModules
         private int retries;
         private AssetBundle assetBundle;
 
-        public WebRequestResourceProvider(bool handleSynchronously)
+        AssetBundleRequestOptions IAssetBundleResourceHandler.Options => options;
+
+        public WebRequestAssetBundleResourceHandler(bool handleSynchronously)
         {
             this.handleSynchronously = handleSynchronously;
         }
@@ -51,7 +53,7 @@ namespace Khepri.AddressableAssets.ResourceModules
 
         private void BeginOperation()
         {    
-            Debug.LogFormat("[{0}.{1}] location={2}", nameof(WebRequestResourceProvider), nameof(BeginOperation), provideHandle.Location);
+            Debug.LogFormat("[{0}.{1}] location={2}", nameof(WebRequestAssetBundleResourceHandler), nameof(BeginOperation), provideHandle.Location);
             var req = CreateWebRequest(provideHandle.Location);
             req.disposeDownloadHandlerOnDispose = false;
             webRequestQueueOperation = WebRequestQueue.QueueRequest(req);

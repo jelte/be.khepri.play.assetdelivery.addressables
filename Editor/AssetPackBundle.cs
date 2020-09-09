@@ -13,6 +13,8 @@ namespace Khepri.AddressableAssets.Editor
         public string Bundle { get; }
         public AssetPackGroupSchema Schema { get; }
 
+        public AssetPackDeliveryMode DeliveryMode => Schema.DeliveryMode;
+
         public bool IsValid => Bundle.EndsWith(BUNDLE_SUFFIX) && !Bundle.EndsWith(CATALOG_BUNDLE);
 
         public AssetPackBundle(string bundle, AssetPackGroupSchema schema)

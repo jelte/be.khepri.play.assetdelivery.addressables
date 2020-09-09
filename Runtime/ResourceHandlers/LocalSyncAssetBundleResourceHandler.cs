@@ -3,14 +3,16 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.ResourceModules
+namespace Khepri.AddressableAssets.ResourceHandlers
 {
-    public class LocalSyncResourceProvider : IResourceProviderModule
+    public class LocalSyncAssetBundleResourceHandler : IAssetBundleResourceHandler
     {
+        public event Action<IAssetBundleResourceHandler, bool, Exception> CompletedEvent;
+        
         private AssetBundle assetBundle;
         private AssetBundleRequestOptions options;
 
-        public event Action<IResourceProviderModule, bool, Exception> CompletedEvent;
+        AssetBundleRequestOptions IAssetBundleResourceHandler.Options => options;
 
         public bool TryBeginOperation(ProvideHandle provideHandle)
         {
@@ -32,7 +34,7 @@ namespace Khepri.AddressableAssets.ResourceModules
         
         private void BeginOperation(string path)
         {
-            Debug.LogFormat("[{0}.{1}] path={2}", nameof(LocalSyncResourceProvider), nameof(BeginOperation), path);
+            Debug.LogFormat("[{0}.{1}] path={2}", nameof(LocalSyncAssetBundleResourceHandler), nameof(BeginOperation), path);
             assetBundle = AssetBundle.LoadFromFile(path, options?.Crc ?? 0);;
             CompletedEvent?.Invoke(this, assetBundle != null, null);
         }

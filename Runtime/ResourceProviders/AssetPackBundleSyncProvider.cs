@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using Khepri.AddressableAssets.ResourceModules;
+using Khepri.AddressableAssets.ResourceHandlers;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.Providers
+namespace Khepri.AddressableAssets.ResourceProviders
 {
 	[DisplayName("Sync Asset Pack Bundle Provider")]
 	public class AssetPackBundleSyncProvider : ResourceProviderBase
@@ -14,24 +14,24 @@ namespace Khepri.AddressableAssets.Providers
 	    
 	    public override void Provide(ProvideHandle providerInterface)
 	    {
-		    IResourceProviderModule[] modules = handleSynchronously ? 
+		    IAssetBundleResourceHandler[] modules = handleSynchronously ? 
 			    
-			    new IResourceProviderModule[]
+			    new IAssetBundleResourceHandler[]
 			    {
-				    new LocalSyncResourceProvider(),
+				    new LocalSyncAssetBundleResourceHandler(),
 #if UNITY_ANDROID
-				    new AssetPackBundleSyncResource(),
+				    new AssetPackSyncAssetBundleResourceHandler(),
 #endif
-				    new WebRequestResourceProvider(true),
+				    new WebRequestAssetBundleResourceHandler(true),
 				}:
-			    new IResourceProviderModule[]
+			    new IAssetBundleResourceHandler[]
 			    {
-				    new LocalAsyncResourceProvider(),
+				    new LocalAsyncAssetBundleResourceHandler(),
 #if UNITY_ANDROID
-				    new AssetPackBundleAsyncResource(),
-		            new JarBundleAsyncResource(),
+				    new AssetPackAsyncAssetBundleResourceHandler(),
+		            new JarAsyncAssetBundleResourceHandler(),
 #endif
-				    new WebRequestResourceProvider(false),
+				    new WebRequestAssetBundleResourceHandler(false),
 			    };
 		    new ModularAssetBundleResource(modules).Start(providerInterface);
 	    }

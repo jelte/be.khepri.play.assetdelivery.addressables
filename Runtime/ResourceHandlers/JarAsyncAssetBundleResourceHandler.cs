@@ -3,20 +3,22 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.ResourceModules
+namespace Khepri.AddressableAssets.ResourceHandlers
 {
-    public class LocalAsyncResourceProvider : IResourceProviderModule
+    public class JarAsyncAssetBundleResourceHandler : IAssetBundleResourceHandler
     {
+        public event Action<IAssetBundleResourceHandler, bool, Exception> CompletedEvent;
+        
         private AssetBundleCreateRequest requestOperation;
         private AssetBundle assetBundle;
         private AssetBundleRequestOptions options;
-
-        public event Action<IResourceProviderModule, bool, Exception> CompletedEvent;
+        
+        AssetBundleRequestOptions IAssetBundleResourceHandler.Options => options;
 
         public bool TryBeginOperation(ProvideHandle provideHandle)
         {
             string path = provideHandle.ResourceManager.TransformInternalId(provideHandle.Location);
-            if (!File.Exists(path))
+            if (!path.StartsWith("jar:"))
             {
                 return false;
             }
@@ -30,7 +32,7 @@ namespace Khepri.AddressableAssets.ResourceModules
         
         private void BeginOperation(string path)
         {
-            Debug.LogFormat("[{0}.{1}] path={2}", nameof(LocalAsyncResourceProvider), nameof(BeginOperation), path);
+            Debug.LogFormat("[{0}.{1}] path={2}", nameof(JarAsyncAssetBundleResourceHandler), nameof(BeginOperation), path);
             requestOperation = AssetBundle.LoadFromFileAsync(path, options?.Crc ?? 0);
             requestOperation.completed += LocalRequestOperationCompleted;
         }

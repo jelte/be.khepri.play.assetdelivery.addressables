@@ -1,25 +1,25 @@
 ﻿using System;
 using System.ComponentModel;
-using Khepri.AddressableAssets.ResourceModules;
+using Khepri.AddressableAssets.ResourceHandlers;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.Providers
+namespace Khepri.AddressableAssets.ResourceProviders
 {
 	[DisplayName("Async Asset Pack Bundle Provider")]
 	public class AssetPackBundleAsyncProvider : ResourceProviderBase
     {
 	    public override void Provide(ProvideHandle providerInterface)
 	    {
-		    new ModularAssetBundleResource(new IResourceProviderModule[]
+		    new ModularAssetBundleResource(new IAssetBundleResourceHandler[]
 	            {
-	                new LocalAsyncResourceProvider(),
-	                new AssetPackAsyncResourceProvider(),
+	                new LocalAsyncAssetBundleResourceHandler(),
 #if UNITY_ANDROID
-	                new JarBundleAsyncResource(),
+	                new AssetPackAsyncAssetBundleResourceHandler(),
+	                new JarAsyncAssetBundleResourceHandler(),
 #endif
-	                new WebRequestResourceProvider(false),
+	                new WebRequestAssetBundleResourceHandler(false),
 	            }
 			).Start(providerInterface);
 	    }

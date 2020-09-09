@@ -2,14 +2,16 @@
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.ResourceModules
+namespace Khepri.AddressableAssets.ResourceHandlers
 {
-    public interface IResourceProviderModule
+    public interface IAssetBundleResourceHandler
     {
-        event Action<IResourceProviderModule, bool, Exception> CompletedEvent;
+        event Action<IAssetBundleResourceHandler, bool, Exception> CompletedEvent;
         
         AssetBundle GetAssetBundle();
         bool TryBeginOperation(ProvideHandle provideHandle);
         void Unload();
+
+        AssetBundleRequestOptions Options { get; }
     }
 }

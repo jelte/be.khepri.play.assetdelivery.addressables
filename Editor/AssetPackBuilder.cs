@@ -63,8 +63,8 @@ namespace Khepri.AddressableAssets.Editor
 		private static void WriteAssetPackConfig(IEnumerable<AssetPackBundle> packBundles)
 		{
 			AssetPackBundleConfig config = GetOrCreateConfig();
-			config.assetPacks = packBundles.Select(pack => pack.Name).ToArray();
-			Debug.LogFormat("[{0}.{1}] bundles={2} path={3}", nameof(AssetPackBuilder), nameof(WriteAssetPackConfig), string.Join(", ", config.assetPacks), AssetPackBundleConfig.PATH);
+			config.packs = packBundles.Select(pack => pack.Name).ToArray();
+			Debug.LogFormat("[{0}.{1}] path={2}", nameof(AssetPackBuilder), nameof(WriteAssetPackConfig), AssetPackBundleConfig.PATH);
 			EditorUtility.SetDirty(config);
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();

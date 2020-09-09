@@ -1,5 +1,5 @@
 ﻿using System;
-using Khepri.AddressableAssets.ResourceModules;
+using Khepri.AddressableAssets.ResourceHandlers;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
@@ -9,10 +9,11 @@ namespace Khepri.AddressableAssets
     {
         private ProvideHandle provideHandle;
         
-        private IResourceProviderModule[] modules;
-        private IResourceProviderModule _activeProviderModule;
+        private IAssetBundleResourceHandler[] modules;
+        private IAssetBundleResourceHandler activeHandler;
+        public AssetBundleRequestOptions Options => activeHandler?.Options;
 
-        public ModularAssetBundleResource(IResourceProviderModule[] modules)
+        public ModularAssetBundleResource(IAssetBundleResourceHandler[] modules)
         {
             this.modules = modules;
             foreach (var module in modules)
@@ -21,23 +22,21 @@ namespace Khepri.AddressableAssets
             }
         }
 
-        private void OnCompleted(IResourceProviderModule providerModule, bool status, Exception exception)
+        private void OnCompleted(IAssetBundleResourceHandler handler, bool status, Exception exception)
         {
             provideHandle.Complete(this, status, exception);
         }
 
         internal void Start(ProvideHandle provideHandle)
         {
-            _activeProviderModule = null;
+            activeHandler = null;
             this.provideHandle = provideHandle;
 
             foreach (var module in modules)
             {
-                if (module.TryBeginOperation(provideHandle))
-                {
-                    _activeProviderModule = module;
-                    return;
-                }
+                if (!module.TryBeginOperation(provideHandle)) continue;
+                activeHandler = module;
+                return;
             }
 
             Debug.LogFormat("[{0}.{1}] path={2} Invalid Path", nameof(ModularAssetBundleResource), nameof(Start), provideHandle.Location);
@@ -47,13 +46,13 @@ namespace Khepri.AddressableAssets
 
         public AssetBundle GetAssetBundle()
         {
-            return _activeProviderModule?.GetAssetBundle();
+            return activeHandler?.GetAssetBundle();
         }
 
         public void Unload()
         {
-            _activeProviderModule?.Unload();
-            _activeProviderModule = null;
+            activeHandler?.Unload();
+            activeHandler = null;
         }
     }
 }

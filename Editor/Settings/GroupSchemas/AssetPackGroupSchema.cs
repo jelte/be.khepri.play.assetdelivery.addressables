@@ -9,13 +9,15 @@ namespace Khepri.AddressableAssets.Editor.Settings.GroupSchemas
     public class AssetPackGroupSchema : AddressableAssetGroupSchema
     {
         [SerializeField]
-        AssetPackDeliveryMode deliveryMode;
+        AssetPackDeliveryMode m_DeliveryMode;
+
+        public AssetPackDeliveryMode DeliveryMode => m_DeliveryMode;
 
         public AssetPack CreateAssetPack(string bundle)
         {
             return new AssetPack
             {
-                DeliveryMode = deliveryMode,
+                DeliveryMode = m_DeliveryMode,
                 AssetBundleFilePath = bundle
             };
         }

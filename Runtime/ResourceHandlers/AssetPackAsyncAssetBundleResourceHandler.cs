@@ -5,15 +5,18 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.ResourceModules
+namespace Khepri.AddressableAssets.ResourceHandlers
 {
-    public class AssetPackAsyncResourceProvider : IResourceProviderModule
+    public class AssetPackAsyncAssetBundleResourceHandler : IAssetBundleResourceHandler
     {
-        public event Action<IResourceProviderModule, bool, Exception> CompletedEvent;
+        public event Action<IAssetBundleResourceHandler, bool, Exception> CompletedEvent;
         
         private PlayAssetPackRequest playAssetPackRequest;
         private AsyncOperation requestOperation;
         private AssetBundle assetBundle;
+        private AssetBundleRequestOptions options;
+
+        AssetBundleRequestOptions IAssetBundleResourceHandler.Options => options;
 
         public bool TryBeginOperation(ProvideHandle provideHandle)
         {
@@ -23,10 +26,11 @@ namespace Khepri.AddressableAssets.ResourceModules
                 return false;
             }
             string assetPackName = Path.GetFileNameWithoutExtension(path);
-            if (!AssetPackBundleConfig.IsPack(assetPackName))
+            if (!AddressablesPlayAssetDelivery.IsPack(assetPackName))
             {
                 return false;
             }
+            options = provideHandle.Location.Data as AssetBundleRequestOptions;
             provideHandle.SetProgressCallback(PercentComplete);
             BeginOperation(assetPackName);
             return true;
@@ -39,7 +43,7 @@ namespace Khepri.AddressableAssets.ResourceModules
         
         private void BeginOperation(string assetPackName)
         {
-            Debug.LogFormat("[{0}.{1}] assetPackName={2}", nameof(AssetPackAsyncResourceProvider), nameof(BeginOperation), assetPackName);
+            Debug.LogFormat("[{0}.{1}] assetPackName={2}", nameof(AssetPackAsyncAssetBundleResourceHandler), nameof(BeginOperation), assetPackName);
             playAssetPackRequest = PlayAssetDelivery.RetrieveAssetPackAsync(assetPackName);
             playAssetPackRequest.Completed += request => OnPlayAssetPackRequestCompleted(assetPackName, request);
         }
