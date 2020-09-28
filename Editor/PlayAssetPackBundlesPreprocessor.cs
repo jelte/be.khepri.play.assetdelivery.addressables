@@ -1,24 +1,24 @@
-﻿using UnityEditor.Build;
+﻿using Khepri.AddressableAssets.Editor;
+using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
-using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.Editor
+public class PlayAssetPackBundlesPreprocessor : IPreprocessBuildWithReport
 {
-    public class PlayAssetPackBundlesPreprocessor : IPreprocessBuildWithReport
+    public int callbackOrder => 2;
+
+    public void OnPreprocessBuild(BuildReport report)
     {
-        public int callbackOrder => 2;
-    
-        public void OnPreprocessBuild(BuildReport report)
+        if (report.summary.platform != BuildTarget.Android)
         {
-            if (Application.platform != RuntimePlatform.Android)
-            {
-                return;
-            }
-            foreach (var bundle in AssetPackBuilder.GetBundles(Addressables.PlayerBuildDataPath))
-            {
-                bundle.DeleteFile();
-            };
+            return;
         }
+        UDebug.Log($"[{nameof(PlayAssetPackBundlesPreprocessor)}.{nameof(OnPreprocessBuild)}]");
+        foreach (var bundle in AssetPackBuilder.GetBundles(Addressables.PlayerBuildDataPath))
+        {
+            bundle.DeleteFile();
+        };
     }
 }

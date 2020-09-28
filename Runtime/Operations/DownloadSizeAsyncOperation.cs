@@ -1,23 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Google.Play.AssetDelivery;
 using Google.Play.Common;
+using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Khepri.AddressableAssets.Operations
 {
- public class DownloadSizeAsyncOperation : AsyncOperationBase<long>
+    public class DownloadSizeAsyncOperation : CustomYieldInstruction
     {
-        private IList<string> assetPacks;
         private List<PlayAsyncOperation<long, AssetDeliveryErrorCode>> assetPackSizeOperations;
         private bool completed = false;
 
-        public DownloadSizeAsyncOperation(IList<string> assetPacks)
-        {
-            this.assetPacks = assetPacks;
-        }
+        /// <summary>
+        /// Whether or not the operation has finished.
+        /// </summary>
+        public bool IsDone { get; private set; }
+        public override bool keepWaiting => !IsDone;
+        
+        public long Result { get; private set; }
+        
+        public AsyncOperationStatus Status { get; private set; }
+        public Exception OperationException { get; private set; }
 
-        protected override void Execute()
+        public DownloadSizeAsyncOperation(IList<string> assetPacks)
         {
             assetPackSizeOperations = new List<PlayAsyncOperation<long, AssetDeliveryErrorCode>>();
             foreach (string assetPack in assetPacks)
@@ -25,6 +32,7 @@ namespace Khepri.AddressableAssets.Operations
                 // check if the asset pack was already downloaded either during install or previous launch.
                 if (PlayAssetDelivery.IsDownloaded(assetPack))
                 {
+                    Debug.LogFormat("[{0}] Assetpack={1} Already downloaded", nameof(DownloadSizeAsyncOperation), assetPack);
                     continue;
                 }
                 PlayAsyncOperation<long, AssetDeliveryErrorCode> sizeOperation = PlayAssetDelivery.GetDownloadSize(assetPack);
@@ -32,16 +40,23 @@ namespace Khepri.AddressableAssets.Operations
                 if (sizeOperation.IsDone)
                 {
                     OnGetPackDownloadSize(sizeOperation);
+                    continue;
                 }
-                else
-                {
-                    sizeOperation.Completed += OnGetPackDownloadSize;   
-                }
+                sizeOperation.Completed += OnGetPackDownloadSize;
+            }
+
+            // No Asset packs needed to be updated.
+            if (assetPackSizeOperations.Count == 0)
+            {
+                Complete(AsyncOperationStatus.Succeeded);
             }
         }
 
         private void OnGetPackDownloadSize(PlayAsyncOperation<long, AssetDeliveryErrorCode> playAsyncOperation)
         {
+            if (!playAsyncOperation.IsSuccessful)
+                Debug.LogFormat("[{0}.{1}] Error={2}", nameof(DownloadSizeAsyncOperation), nameof(OnGetPackDownloadSize), playAsyncOperation.Error);
+            
             // Wait until all size operations are completed.
             if (assetPackSizeOperations.Any(operation => !operation.IsDone))
                 return;
@@ -50,20 +65,27 @@ namespace Khepri.AddressableAssets.Operations
             if (completed)
                 return;
             completed = true;
-            
+
             // At least one operation failed.
-            if (assetPackSizeOperations.Any(operation => !operation.IsSuccessful))
+            if (!assetPackSizeOperations.All(operation => operation.IsSuccessful))
             {
                 AssetDeliveryErrorCode errorCode = assetPackSizeOperations
                     .Where(operation => !operation.IsSuccessful)
                     .Select(op => op.Error)
                     .FirstOrDefault();
-                Complete(0L, false, $"Failed to retrieve pending assetPack size {errorCode}");
-                return;
+                Debug.LogFormat("[{0}.{1}] errorCode={2}", nameof(DownloadSizeAsyncOperation), nameof(OnGetPackDownloadSize), errorCode);
+                Complete(AsyncOperationStatus.Failed, new Exception($"Failed to retrieve pending assetPack size {errorCode}"));
             }
+            Result = assetPackSizeOperations.Sum(operation => operation.GetResult());
+            Debug.LogFormat("[{0}.{1}] downloadSize={2}", nameof(DownloadSizeAsyncOperation), nameof(OnGetPackDownloadSize), Result);
+            Complete(AsyncOperationStatus.Succeeded);
+        }
 
-            long size = assetPackSizeOperations.Sum(operation => operation.GetResult());
-            Complete(size, true, null);
+        private void Complete(AsyncOperationStatus status, Exception exception = null)
+        {
+            Status = status;
+            OperationException = exception;
+            IsDone = true;
         }
     }
 }

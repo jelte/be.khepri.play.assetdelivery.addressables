@@ -1,80 +1,22 @@
-﻿using System;
-using System.IO;
-using Google.Play.AssetDelivery;
+﻿using Google.Play.AssetDelivery;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace Khepri.AddressableAssets.ResourceHandlers
 {
-    public class AssetPackSyncAssetBundleResourceHandler : IAssetBundleResourceHandler
+    public class AssetPackSyncAssetBundleResourceHandler : AssetPackAssetBundleResourceHandlerBase
     {
-        public event Action<IAssetBundleResourceHandler, bool, Exception> CompletedEvent;
-        
-        private PlayAssetPackRequest playAssetPackRequest;
-        private AssetPackBundleConfig config;        
-        private AssetBundle assetBundle;
-        private AssetBundleRequestOptions options;
-
-        AssetBundleRequestOptions IAssetBundleResourceHandler.Options => options;
-
-        public AssetBundle GetAssetBundle()
-        {
-            return assetBundle;
-        }
-
-        public bool TryBeginOperation(ProvideHandle provideHandle)
-        {
-            string path = provideHandle.ResourceManager.TransformInternalId(provideHandle.Location);
-            if (!path.StartsWith(Addressables.RuntimePath) || !path.EndsWith(".bundle"))
-            {
-                return false;
-            }
-            string assetPackName = Path.GetFileNameWithoutExtension(path);
-            if (!AddressablesPlayAssetDelivery.IsPack(assetPackName))
-            {
-                return false;
-            }
-
-            provideHandle.SetProgressCallback(PercentComplete);
-            BeginOperation(assetPackName);
-            return true;
-        }
-        
-        private void BeginOperation(string assetPackName)
+        protected override void BeginOperationImpl(string assetPackName)
         {
             Debug.LogFormat("[{0}.{1}] assetPackName={2}", nameof(AssetPackSyncAssetBundleResourceHandler), nameof(BeginOperation), assetPackName);
             playAssetPackRequest = PlayAssetDelivery.RetrieveAssetPackAsync(assetPackName);
-            Exception exception = null;
-            if (playAssetPackRequest.IsDone)
+            if (!playAssetPackRequest.IsDone)
             {
-                var assetLocation = playAssetPackRequest.GetAssetLocation(assetPackName);
-                assetBundle = AssetBundle.LoadFromFile(assetLocation.Path, /* crc= */ 0, assetLocation.Offset);
+                CompleteOperation(this, $"Asset Pack was not retrieved Synchronously: '{assetPackName}'.");
+                return;
             }
-            else
-            {
-                exception = new Exception($"Asset Pack was not retrieved Synchronously: '{assetPackName}'.");
-            }
-            CompletedEvent?.Invoke(this, assetBundle != null, exception);
-        }
-
-        private float PercentComplete()
-        {
-            return 1f;
-        }
-        
-        public void Unload()
-        {
-            if (assetBundle != null)
-            {
-                assetBundle.Unload(true);
-                assetBundle = null;
-            }
-            if (playAssetPackRequest != null)
-            {
-                playAssetPackRequest.AttemptCancel();
-                playAssetPackRequest = null;
-            }
+            var assetLocation = playAssetPackRequest.GetAssetLocation(assetPackName);
+            var assetBundle = AssetBundle.LoadFromFile(assetLocation.Path, 0, assetLocation.Offset);
+            CompleteOperation(this, assetBundle);
         }
     }
 }

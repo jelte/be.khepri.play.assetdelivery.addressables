@@ -9,21 +9,20 @@ namespace Khepri.AddressableAssets.ResourceProviders
 {
 	[DisplayName("Async Asset Pack Bundle Provider")]
 	public class AssetPackBundleAsyncProvider : ResourceProviderBase
-    {
-	    public override void Provide(ProvideHandle providerInterface)
+	{
+		public override void Provide(ProvideHandle provideHandle)
 	    {
-		    new ModularAssetBundleResource(new IAssetBundleResourceHandler[]
-	            {
-	                new LocalAsyncAssetBundleResourceHandler(),
+		    new ModularAssetBundleResource(false, new IAssetBundleResourceHandler[]
+		    {
+			    new LocalAsyncAssetBundleResourceHandler(),
 #if UNITY_ANDROID
-	                new AssetPackAsyncAssetBundleResourceHandler(),
-	                new JarAsyncAssetBundleResourceHandler(),
+			    new AssetPackAsyncAssetBundleResourceHandler(),
+			    new JarAsyncAssetBundleResourceHandler(),
 #endif
-	                new WebRequestAssetBundleResourceHandler(false),
-	            }
-			).Start(providerInterface);
+			    new WebRequestAsyncAssetBundleResourceHandler(),
+		    }).Start(provideHandle);
 	    }
-		
+
 	    public override Type GetDefaultType(IResourceLocation location)
 	    {
 		    return typeof(IAssetBundleResource);

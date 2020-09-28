@@ -11,29 +11,35 @@ namespace Khepri.AddressableAssets.ResourceProviders
 	public class AssetPackBundleSyncProvider : ResourceProviderBase
     {
 	    public static bool handleSynchronously = false;
-	    
-	    public override void Provide(ProvideHandle providerInterface)
+
+	    public override void Provide(ProvideHandle provideHandle)
 	    {
-		    IAssetBundleResourceHandler[] modules = handleSynchronously ? 
-			    
-			    new IAssetBundleResourceHandler[]
+		    Debug.LogFormat("[{0}.{1}] Type={2} Location={3} handleSynchronously={4}", nameof(AssetPackBundleSyncProvider), nameof(Provide), provideHandle.Type, provideHandle.Location, handleSynchronously);
+		    new ModularAssetBundleResource(handleSynchronously, GetModules()).Start(provideHandle);
+	    }
+
+	    private IAssetBundleResourceHandler[] GetModules()
+	    {
+		    if (handleSynchronously)
+		    {
+			    return new IAssetBundleResourceHandler[]
 			    {
 				    new LocalSyncAssetBundleResourceHandler(),
 #if UNITY_ANDROID
 				    new AssetPackSyncAssetBundleResourceHandler(),
 #endif
-				    new WebRequestAssetBundleResourceHandler(true),
-				}:
-			    new IAssetBundleResourceHandler[]
-			    {
-				    new LocalAsyncAssetBundleResourceHandler(),
-#if UNITY_ANDROID
-				    new AssetPackAsyncAssetBundleResourceHandler(),
-		            new JarAsyncAssetBundleResourceHandler(),
-#endif
-				    new WebRequestAssetBundleResourceHandler(false),
+				    new WebRequestSyncAssetBundleResourceHandler(),
 			    };
-		    new ModularAssetBundleResource(modules).Start(providerInterface);
+		    }
+		    return new IAssetBundleResourceHandler[]
+		    {
+			    new LocalAsyncAssetBundleResourceHandler(),
+#if UNITY_ANDROID
+			    new AssetPackAsyncAssetBundleResourceHandler(),
+			    new JarAsyncAssetBundleResourceHandler(),
+#endif
+			    new WebRequestAsyncAssetBundleResourceHandler(),
+		    };
 	    }
 		
 	    public override Type GetDefaultType(IResourceLocation location)
@@ -45,7 +51,7 @@ namespace Khepri.AddressableAssets.ResourceProviders
 	    {
 		    if (location == null)
 		    {
-			    throw new ArgumentNullException("location");
+			    throw new ArgumentNullException(nameof(location));
 		    }
 
 		    if (asset == null)

@@ -6,12 +6,7 @@ namespace Khepri.AddressableAssets.ResourceHandlers
 {
     public interface IAssetBundleResourceHandler
     {
-        event Action<IAssetBundleResourceHandler, bool, Exception> CompletedEvent;
-        
-        AssetBundle GetAssetBundle();
-        bool TryBeginOperation(ProvideHandle provideHandle);
+        bool TryBeginOperation(ProvideHandle provideHandle, AssetBundleRequestOptions options, Action<IAssetBundleResourceHandler, AssetBundle, Exception> OnCompleted);
         void Unload();
-
-        AssetBundleRequestOptions Options { get; }
     }
 }

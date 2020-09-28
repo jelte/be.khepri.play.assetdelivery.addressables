@@ -12,17 +12,27 @@ namespace Khepri.AddressableAssets
 {
     public class AddressablesPlayAssetDelivery
     {
-        private static AssetPackBundleConfig m_Config;
-        private static AssetPackBundleConfig config => m_Config ? m_Config : TryLoad();
+        private static AssetPackBundleConfig config;
+        private static bool isInitialized;
         
-        private static AssetPackBundleConfig TryLoad()
+        private static void TryInitialize()
         {
-            return Resources.Load<AssetPackBundleConfig>(AssetPackBundleConfig.PATH) ?? ScriptableObject.CreateInstance<AssetPackBundleConfig>();
+            if (isInitialized)
+            {
+                return;
+            }
+            config = Resources.Load<AssetPackBundleConfig>(AssetPackBundleConfig.FILENAME);
+            if (config == null)
+            {
+                Debug.LogFormat("[{0}.{1}] config not found. (Filename={2})", nameof(AddressablesPlayAssetDelivery), nameof(TryInitialize), AssetPackBundleConfig.FILENAME);
+            }
+            isInitialized = true;
         }
         
         public static bool IsPack(string name)
         {
-            return config.IsPack(name);
+            TryInitialize();
+            return (config?.IsPack(name)).GetValueOrDefault(false);
         }
         
         public static DownloadSizeAsyncOperation GetDownloadSizeAsync(object key)
@@ -104,7 +114,5 @@ namespace Khepri.AddressableAssets
         {
             return (obj as IKeyEvaluator)?.RuntimeKey ?? obj;
         }
-
-
     }
 }
