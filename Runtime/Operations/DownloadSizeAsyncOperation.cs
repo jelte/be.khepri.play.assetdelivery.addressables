@@ -6,7 +6,7 @@ using Google.Play.Common;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Khepri.AddressableAssets.Operations
+namespace Khepri.AssetDelivery.Operations
 {
     public class DownloadSizeAsyncOperation : CustomYieldInstruction
     {

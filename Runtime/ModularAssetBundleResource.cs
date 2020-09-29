@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using Khepri.AddressableAssets.ResourceHandlers;
+using Khepri.AssetDelivery.ResourceHandlers;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets
+namespace Khepri.AssetDelivery
 {
     public class ModularAssetBundleResource : IAssetBundleResource
     {

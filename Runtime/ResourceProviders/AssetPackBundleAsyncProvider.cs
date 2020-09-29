@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using Khepri.AddressableAssets.ResourceHandlers;
+using Khepri.AssetDelivery.ResourceHandlers;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.ResourceProviders
+namespace Khepri.AssetDelivery.ResourceProviders
 {
 	[DisplayName("Async Asset Pack Bundle Provider")]
 	public class AssetPackBundleAsyncProvider : ResourceProviderBase

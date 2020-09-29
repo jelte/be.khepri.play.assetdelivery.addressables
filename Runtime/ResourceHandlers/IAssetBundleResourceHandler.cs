@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.ResourceHandlers
+namespace Khepri.AssetDelivery.ResourceHandlers
 {
     public interface IAssetBundleResourceHandler
     {

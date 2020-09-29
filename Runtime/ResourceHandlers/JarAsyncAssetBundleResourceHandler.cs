@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Khepri.AddressableAssets.ResourceHandlers
+namespace Khepri.AssetDelivery.ResourceHandlers
 {
     public class JarAsyncAssetBundleResourceHandler : AssetBundleResourceHandlerBase
     {

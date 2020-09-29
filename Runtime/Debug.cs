@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 
-namespace Khepri.AddressableAssets
+namespace Khepri.AssetDelivery
 {
     public class Debug
     {
-        [Conditional("DEBUG_ADDRESSABLES")]
+        [Conditional("DEBUG_PLAYASSETDELIVERY")]
         public static void LogFormat(string format, params object[] args)
         {
             UnityEngine.Debug.LogFormat(format, args);

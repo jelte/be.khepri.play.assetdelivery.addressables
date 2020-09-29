@@ -1,4 +1,4 @@
-﻿using Khepri.AddressableAssets.Editor;
+﻿using Khepri.PlayAssetDelivery.Editor;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;

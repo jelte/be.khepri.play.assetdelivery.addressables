@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Khepri.AddressableAssets
+namespace Khepri.AssetDelivery
 {
     internal class WebRequestQueueOperation
     {

@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Khepri.AddressableAssets.Operations;
+using Khepri.AssetDelivery.Operations;
+using Khepri.AssetDelivery.ResourceProviders;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets
+namespace Khepri.AssetDelivery
 {
-    public class AddressablesPlayAssetDelivery
+    public class AddressablesAssetDelivery
     {
         private static AssetPackBundleConfig config;
         private static bool isInitialized;
-        
+
+        public static bool handleSynchronously
+        {
+            set => AssetPackBundleSyncProvider.handleSynchronously = value;
+        }
+
         private static void TryInitialize()
         {
             if (isInitialized)
@@ -24,7 +30,7 @@ namespace Khepri.AddressableAssets
             config = Resources.Load<AssetPackBundleConfig>(AssetPackBundleConfig.FILENAME);
             if (config == null)
             {
-                Debug.LogFormat("[{0}.{1}] config not found. (Filename={2})", nameof(AddressablesPlayAssetDelivery), nameof(TryInitialize), AssetPackBundleConfig.FILENAME);
+                Debug.LogFormat("[{0}.{1}] config not found. (Filename={2})", nameof(AddressablesAssetDelivery), nameof(TryInitialize), AssetPackBundleConfig.FILENAME);
             }
             isInitialized = true;
         }

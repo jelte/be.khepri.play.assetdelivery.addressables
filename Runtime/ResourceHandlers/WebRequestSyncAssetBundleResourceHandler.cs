@@ -1,6 +1,6 @@
 ﻿using UnityEngine.Networking;
 
-namespace Khepri.AddressableAssets.ResourceHandlers
+namespace Khepri.AssetDelivery.ResourceHandlers
 {
     public class WebRequestSyncAssetBundleResourceHandler : WebRequestAssetBundleResourceHandlerBase
     {

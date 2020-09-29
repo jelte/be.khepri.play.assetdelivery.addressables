@@ -2,7 +2,7 @@
 using Google.Play.AssetDelivery;
 using UnityEngine.AddressableAssets;
 
-namespace Khepri.AddressableAssets.ResourceHandlers
+namespace Khepri.AssetDelivery.ResourceHandlers
 {
     public abstract class AssetPackAssetBundleResourceHandlerBase : AssetBundleResourceHandlerBase
     {
@@ -15,7 +15,7 @@ namespace Khepri.AddressableAssets.ResourceHandlers
             {
                 return false;
             }
-            return AddressablesPlayAssetDelivery.IsPack(Path.GetFileNameWithoutExtension(path));
+            return AddressablesAssetDelivery.IsPack(Path.GetFileNameWithoutExtension(path));
         }
 
         protected override float PercentComplete()

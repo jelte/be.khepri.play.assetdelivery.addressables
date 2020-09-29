@@ -1,7 +1,7 @@
 ﻿using Google.Play.AssetDelivery;
 using UnityEngine;
 
-namespace Khepri.AddressableAssets.ResourceHandlers
+namespace Khepri.AssetDelivery.ResourceHandlers
 {
     public class AssetPackSyncAssetBundleResourceHandler : AssetPackAssetBundleResourceHandlerBase
     {

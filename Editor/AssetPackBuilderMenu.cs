@@ -1,7 +1,7 @@
 ﻿using Google.Android.AppBundle.Editor.Internal;
 using UnityEditor;
 
-namespace Khepri.AddressableAssets.Editor
+namespace Khepri.PlayAssetDelivery.Editor
 {
     public class AssetPackBuilderMenu
     {

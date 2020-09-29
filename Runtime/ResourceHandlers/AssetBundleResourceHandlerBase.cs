@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
-namespace Khepri.AddressableAssets.ResourceHandlers
+namespace Khepri.AssetDelivery.ResourceHandlers
 {
     public abstract class AssetBundleResourceHandlerBase : IAssetBundleResourceHandler
     {

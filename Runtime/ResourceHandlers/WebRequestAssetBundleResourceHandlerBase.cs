@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using UnityEngine.ResourceManagement.Util;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.ResourceHandlers
+namespace Khepri.AssetDelivery.ResourceHandlers
 {
     public abstract class WebRequestAssetBundleResourceHandlerBase : AssetBundleResourceHandlerBase
     {

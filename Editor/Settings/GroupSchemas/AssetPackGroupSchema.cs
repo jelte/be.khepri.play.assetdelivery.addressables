@@ -6,7 +6,7 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
 
-namespace Khepri.AddressableAssets.Editor.Settings.GroupSchemas
+namespace Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas
 {
     [DisplayName("Play Asset Delivery")]
     public class AssetPackGroupSchema : AddressableAssetGroupSchema

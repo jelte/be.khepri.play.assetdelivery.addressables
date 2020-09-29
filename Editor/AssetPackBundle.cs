@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Google.Android.AppBundle.Editor;
-using Khepri.AddressableAssets.Editor.Settings.GroupSchemas;
+using Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.Editor
+namespace Khepri.PlayAssetDelivery.Editor
 {
     internal struct AssetPackBundle
     {

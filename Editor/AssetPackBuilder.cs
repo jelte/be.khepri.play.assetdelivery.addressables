@@ -5,14 +5,15 @@ using System.Linq;
 using Google.Android.AppBundle.Editor;
 using Google.Android.AppBundle.Editor.AssetPacks;
 using Google.Android.AppBundle.Editor.Internal;
-using Google.Android.AppBundle.Editor.Internal.BuildTools;
-using Khepri.AddressableAssets.Editor.Settings.GroupSchemas;
+using Khepri.AssetDelivery;
+using Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Debug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets.Editor
+namespace Khepri.PlayAssetDelivery.Editor
 {
     public class AssetPackBuilder
     {
