@@ -25,9 +25,9 @@ namespace Khepri.PlayAssetDelivery.Editor
             Schema = schema;
         }
 
-        public AssetPack CreateAssetPack(TextureCompressionFormat textureCompressionFormat)
+        public AssetPack CreateAssetPack(TextureCompressionFormat textureCompressionFormat, string path)
         {
-            return Schema.CreateAssetPack(Bundle, textureCompressionFormat);
+            return Schema.CreateAssetPack(path, textureCompressionFormat);
         }
 
         public void DeleteFile()

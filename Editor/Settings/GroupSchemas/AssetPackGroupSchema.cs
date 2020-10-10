@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using Google.Android.AppBundle.Editor;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
 
 namespace Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas
@@ -21,9 +21,9 @@ namespace Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas
             return new AssetPack
             {
                 DeliveryMode = m_DeliveryMode,
-                CompressionFormatToAssetBundleFilePath = new Dictionary<TextureCompressionFormat, string>()
+                CompressionFormatToAssetPackDirectoryPath = new Dictionary<TextureCompressionFormat, string>()
                 {
-                    {textureCompressionFormat, bundle}
+                    {textureCompressionFormat, Path.GetDirectoryName(bundle)}
                 }
             };
         }

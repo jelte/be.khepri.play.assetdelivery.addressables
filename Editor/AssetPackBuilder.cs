@@ -11,13 +11,14 @@ using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using Debug = UnityEngine.Debug;
 
 namespace Khepri.PlayAssetDelivery.Editor
 {
     public class AssetPackBuilder
     {
+	    public static string BuildPath => "Library/be.khepri.play/StreamingAssetsCopy/";
+
 	    private static string GetLocalBuildPath()
 	    {
 		    var settings = AddressableAssetSettingsDefaultObject.Settings;
@@ -47,10 +48,22 @@ namespace Khepri.PlayAssetDelivery.Editor
 				return null;
 			}
 			var bundles = GetBundles(buildPath);
+
+			if (Directory.Exists(BuildPath))
+			{
+				Directory.Delete(BuildPath, true);
+			}
+			Directory.CreateDirectory(BuildPath);
+
 			foreach (var bundle in bundles)
 			{
-				assetPackConfig.AssetPacks.Add(bundle.Name, bundle.CreateAssetPack(textureCompressionFormat));
+				string targetPath = Path.Combine(BuildPath, bundle.Name);
+				Directory.CreateDirectory(targetPath);
+				string bundlePath = Path.Combine(targetPath, Path.GetFileNameWithoutExtension(bundle.Bundle));
+				File.Copy(bundle.Bundle, bundlePath);
+				assetPackConfig.AssetPacks.Add(bundle.Name, bundle.CreateAssetPack(textureCompressionFormat, bundlePath));
 			}
+			
 			WriteAssetPackConfig(bundles);
 			AssetPackConfigSerializer.SaveConfig(assetPackConfig);
 			return assetPackConfig;
