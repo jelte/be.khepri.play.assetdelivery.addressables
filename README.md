@@ -10,12 +10,12 @@ To start you will need to add the package to your project. You can do this via t
 
 1. Press ` + `
 2. Select `Add package from git URL...` 
-3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#<version>`
+3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc1`
 
 ### Via manifest.json
 
 ```json
-   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#<version>",
+   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc1",
 ```
 
 ##  Configure Groups
