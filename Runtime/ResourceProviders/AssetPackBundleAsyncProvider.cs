@@ -7,7 +7,7 @@ using UDebug = UnityEngine.Debug;
 
 namespace Khepri.AssetDelivery.ResourceProviders
 {
-	[DisplayName("Async Asset Pack Bundle Provider")]
+	[DisplayName("Asset Pack Bundle Provider")]
 	public class AssetPackBundleAsyncProvider : ResourceProviderBase
 	{
 		public override void Provide(ProvideHandle provideHandle)

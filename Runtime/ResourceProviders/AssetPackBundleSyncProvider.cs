@@ -7,7 +7,7 @@ using UDebug = UnityEngine.Debug;
 
 namespace Khepri.AssetDelivery.ResourceProviders
 {
-	[DisplayName("Sync Asset Pack Bundle Provider")]
+	[DisplayName("Asset Pack Bundle Provider (Sync)")]
 	public class AssetPackBundleSyncProvider : ResourceProviderBase
     {
 	    public static bool handleSynchronously = false;

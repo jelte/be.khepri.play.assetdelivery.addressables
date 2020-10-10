@@ -12,7 +12,7 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace Khepri.AssetDelivery.ResourceProviders
 {
-	[DisplayName("Sync Asset Provider")]
+	[DisplayName("Assets From Bundles Provider (Sync)")]
 	public class SyncBundledAssetProvider : BundledAssetProvider
 	{
 		private class InternalOp
