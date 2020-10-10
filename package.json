@@ -13,5 +13,6 @@
 	{
 		"name" : "Jelte Steijaert",
 		"e-mail": "jelte.steijaert@gmail.com"
-	}
+	},
+	"publishConfig": { "registry": "https://npm.pkg.github.com/" }
 }
