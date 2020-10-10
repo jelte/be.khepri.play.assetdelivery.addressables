@@ -1,29 +1,28 @@
 ﻿using System;
 using System.ComponentModel;
-using Khepri.AddressableAssets.BundleResourceModules;
+using Khepri.AssetDelivery.ResourceHandlers;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UDebug = UnityEngine.Debug;
 
-namespace Khepri.AddressableAssets
+namespace Khepri.AssetDelivery.ResourceProviders
 {
-	[DisplayName("Async Asset Pack Bundle Provider")]
-    public class AssetPackBundleAsyncProvider : ResourceProviderBase
-    {
-	    public override void Provide(ProvideHandle providerInterface)
+	[DisplayName("Asset Pack Bundle Provider")]
+	public class AssetPackBundleAsyncProvider : ResourceProviderBase
+	{
+		public override void Provide(ProvideHandle provideHandle)
 	    {
-		    new ModularAssetBundleResource(new IBundleResourceModule[]
-	            {
-	                new LocalBundleAsyncResource(),
-	                new AssetPackBundleAsyncResource(),
+		    new ModularAssetBundleResource(false, new IAssetBundleResourceHandler[]
+		    {
+			    new LocalAsyncAssetBundleResourceHandler(),
 #if UNITY_ANDROID
-	                new JarBundleAsyncResource(),
+			    new AssetPackAsyncAssetBundleResourceHandler(),
+			    new JarAsyncAssetBundleResourceHandler(),
 #endif
-	                new WebRequestBundleResource(false),
-	            }
-			).Start(providerInterface);
+			    new WebRequestAsyncAssetBundleResourceHandler(),
+		    }).Start(provideHandle);
 	    }
-		
+
 	    public override Type GetDefaultType(IResourceLocation location)
 	    {
 		    return typeof(IAssetBundleResource);
@@ -33,7 +32,7 @@ namespace Khepri.AddressableAssets
 	    {
 		    if (location == null)
 		    {
-			    throw new ArgumentNullException("location");
+			    throw new ArgumentNullException(nameof(location));
 		    }
 
 		    if (asset == null)

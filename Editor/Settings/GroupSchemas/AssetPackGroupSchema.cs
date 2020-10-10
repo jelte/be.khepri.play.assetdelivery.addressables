@@ -1,24 +1,51 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Google.Android.AppBundle.Editor;
+using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
-using PlayAssetPackDeliveryMode = Google.Android.AppBundle.Editor.AssetPackDeliveryMode;
 
-namespace Khepri.AddressableAssets.Editor.Settings.GroupSchemas
+namespace Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas
 {
     [DisplayName("Play Asset Delivery")]
     public class AssetPackGroupSchema : AddressableAssetGroupSchema
     {
         [SerializeField]
-        AssetPackDeliveryMode deliveryMode;
+        AssetPackDeliveryMode m_DeliveryMode;
 
-        public AssetPack CreateAssetPack(string bundle)
+        public AssetPackDeliveryMode mDeliveryMode => m_DeliveryMode;
+
+        public AssetPack CreateAssetPack(string bundle, TextureCompressionFormat textureCompressionFormat)
         {
             return new AssetPack
             {
-                DeliveryMode = (PlayAssetPackDeliveryMode) deliveryMode,
-                AssetBundleFilePath = bundle
+                DeliveryMode = m_DeliveryMode,
+                CompressionFormatToAssetBundleFilePath = new Dictionary<TextureCompressionFormat, string>()
+                {
+                    {textureCompressionFormat, bundle}
+                }
             };
+        }
+        
+        /// <inheritdoc/>
+        public override void OnGUIMultiple(List<AddressableAssetGroupSchema> otherSchemas)
+        {
+            var so = new SerializedObject(this);
+            var prop = so.FindProperty("m_DeliveryMode");
+
+            // Type/Static Content
+            ShowMixedValue(prop, otherSchemas, typeof(bool), "m_DeliveryMode");
+            EditorGUI.BeginChangeCheck();
+            m_DeliveryMode = (AssetPackDeliveryMode)EditorGUILayout.EnumPopup("Delivery Mode", m_DeliveryMode);
+            if (EditorGUI.EndChangeCheck())
+            {
+                foreach (var s in otherSchemas)
+                    ((AssetPackGroupSchema) s).m_DeliveryMode = m_DeliveryMode;
+            }
+            EditorGUI.showMixedValue = false;
+
+            so.ApplyModifiedProperties();
         }
     }
 }
