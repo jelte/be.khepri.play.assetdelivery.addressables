@@ -12,7 +12,8 @@ public class PlayAssetPackBundlesPreprocessor : IPreprocessBuildWithReport
 
     public void OnPreprocessBuild(BuildReport report)
     {
-        if (report.summary.platform != BuildTarget.Android || !Path.GetExtension(report.summary.outputPath).Equals("aab"))
+        var outputPathExtension = Path.GetExtension(report.summary.outputPath);
+        if (report.summary.platform != BuildTarget.Android || !outputPathExtension.Equals("aab"))
         {
             AssetPackBuilder.ClearConfig();
             return;

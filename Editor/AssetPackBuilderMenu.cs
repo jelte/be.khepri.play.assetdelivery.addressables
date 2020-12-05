@@ -1,4 +1,5 @@
-﻿using Google.Android.AppBundle.Editor.Internal;
+﻿using Google.Android.AppBundle.Editor;
+using Google.Android.AppBundle.Editor.Internal;
 using UnityEditor;
 
 namespace Khepri.PlayAssetDelivery.Editor
@@ -10,7 +11,7 @@ namespace Khepri.PlayAssetDelivery.Editor
         [MenuItem(GoogleEditorMenu.MainMenuName + "/" + CreateAction, false, 101)]
         public static void CreateConfig()
         {
-            var assetPackConfig = AssetPackBuilder.CreateAssetPacks(AssetPackBuilder.ToTextureCompressionFormat(EditorUserBuildSettings.androidBuildSubtarget));
+            var assetPackConfig = AssetPackBuilder.CreateAssetPacks(TextureCompressionFormat.Default);
             if (assetPackConfig == null)
             {
                 EditorUtility.DisplayDialog(CreateAction, "Unable to create AssetPack config. Make sure Addressables asset bundles have been build!", "Ok");
