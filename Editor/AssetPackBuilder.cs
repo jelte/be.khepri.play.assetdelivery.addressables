@@ -9,6 +9,7 @@ using Khepri.AssetDelivery;
 using Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Debug = UnityEngine.Debug;
@@ -17,34 +18,48 @@ namespace Khepri.PlayAssetDelivery.Editor
 {
     public class AssetPackBuilder
     {
+	    private static string GetLocalBuildPath()
+	    {
+		    var settings = AddressableAssetSettingsDefaultObject.Settings;
+		    var profileSettings = settings.profileSettings;
+		    var profileId = settings.activeProfileId;
+		    var value = profileSettings.GetValueByName(profileId, AddressableAssetSettings.kLocalBuildPath);
+
+		    return profileSettings.EvaluateString(profileId, value);
+	    }
+
 	    /**
 	     * Create the Play Asset Delivery configuration.
 	     */
-	    public static AssetPackConfig CreateAssetPacks(TextureCompressionFormat textureCompressionFormat)
+	    public static AssetPackConfig CreateAssetPacks(TextureCompressionFormat textureCompressionFormat, string buildPath = null)
 		{
-			Debug.LogFormat("[{0}.{1}] path={2}", nameof(AssetPackBuilder), nameof(CreateAssetPacks), Addressables.BuildPath);
+			if (string.IsNullOrEmpty(buildPath))
+			{
+				buildPath = GetLocalBuildPath();
+			}
+			Debug.LogFormat("[{0}.{1}] path={2}", nameof(AssetPackBuilder), nameof(CreateAssetPacks), buildPath);
 			AssetPackConfig assetPackConfig = new AssetPackConfig
 			{
 				DefaultTextureCompressionFormat = textureCompressionFormat
 			};
-			if (!Directory.Exists(Addressables.BuildPath))
+			if (!Directory.Exists(buildPath))
 			{
 				return null;
 			}
-			var bundles = GetBundles(Addressables.BuildPath);
+			var bundles = GetBundles(buildPath);
 			foreach (var bundle in bundles)
 			{
 				assetPackConfig.AssetPacks.Add(bundle.Name, bundle.CreateAssetPack(textureCompressionFormat));
 			}
-			WriteAssetPackConfig(bundles);;
+			WriteAssetPackConfig(bundles);
 			AssetPackConfigSerializer.SaveConfig(assetPackConfig);
 			return assetPackConfig;
 		}
 
-	    public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, MobileTextureSubtarget mobileTextureSubtarget)
+	    public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, MobileTextureSubtarget mobileTextureSubtarget, string buildPath)
 	    {
 		    TextureCompressionFormat textureCompressionFormat = ToTextureCompressionFormat(mobileTextureSubtarget); 
-		    return BuildBundleWithAssetPacks(buildPlayerOptions, textureCompressionFormat);
+		    return BuildBundleWithAssetPacks(buildPlayerOptions, textureCompressionFormat, buildPath);
 	    }
 
 	    public static TextureCompressionFormat ToTextureCompressionFormat(MobileTextureSubtarget mobileTextureSubtarget)
@@ -68,13 +83,13 @@ namespace Khepri.PlayAssetDelivery.Editor
 		    }
 	    }
 	    
-	    public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, TextureCompressionFormat textureCompressionFormat)
+	    public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, TextureCompressionFormat textureCompressionFormat, string buildPath)
 	    {
 		    if (buildPlayerOptions.target != BuildTarget.Android)
 		    {
 			    return false;
 		    }
-		    return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks(textureCompressionFormat));
+		    return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks(textureCompressionFormat, buildPath));
 	    }
 
 	    internal static AssetPackBundle[] GetBundles(string path)
