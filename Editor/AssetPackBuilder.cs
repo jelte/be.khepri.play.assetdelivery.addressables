@@ -143,6 +143,11 @@ namespace Khepri.PlayAssetDelivery.Editor
 			if (config == null)
 			{
 				config = ScriptableObject.CreateInstance<AssetPackBundleConfig>();
+				var basePath = Path.GetDirectoryName(AssetPackBundleConfig.PATH);
+				if (!Directory.Exists(basePath))
+				{
+					Directory.CreateDirectory(basePath);
+				}
 				AssetDatabase.CreateAsset(config, AssetPackBundleConfig.PATH);
 			}
 			return config;
