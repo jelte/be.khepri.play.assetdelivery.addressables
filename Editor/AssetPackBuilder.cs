@@ -134,5 +134,10 @@ namespace Khepri.PlayAssetDelivery.Editor
 			}
 			return config;
 		}
+
+		public static void ClearConfig()
+		{
+			AssetDatabase.DeleteAsset(AssetPackBundleConfig.PATH);
+		}
     }
 }

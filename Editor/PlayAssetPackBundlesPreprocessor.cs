@@ -1,4 +1,5 @@
-﻿using Khepri.PlayAssetDelivery.Editor;
+﻿using System.IO;
+using Khepri.PlayAssetDelivery.Editor;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
@@ -11,14 +12,15 @@ public class PlayAssetPackBundlesPreprocessor : IPreprocessBuildWithReport
 
     public void OnPreprocessBuild(BuildReport report)
     {
-        if (report.summary.platform != BuildTarget.Android)
+        if (report.summary.platform != BuildTarget.Android || !Path.GetExtension(report.summary.outputPath).Equals("aab"))
         {
+            AssetPackBuilder.ClearConfig();
             return;
         }
         UDebug.Log($"[{nameof(PlayAssetPackBundlesPreprocessor)}.{nameof(OnPreprocessBuild)}]");
         foreach (var bundle in AssetPackBuilder.GetBundles(Addressables.PlayerBuildDataPath))
         {
             bundle.DeleteFile();
-        };
+        }
     }
 }
