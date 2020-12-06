@@ -19,7 +19,7 @@ namespace Khepri.PlayAssetDelivery.Editor
     {
 	    public static string BuildPath => "Library/be.khepri.play/StreamingAssetsCopy/";
 
-	    private static string GetLocalBuildPath()
+	    public static string GetLocalBuildPath()
 	    {
 		    var settings = AddressableAssetSettingsDefaultObject.Settings;
 		    var profileSettings = settings.profileSettings;
@@ -105,9 +105,9 @@ namespace Khepri.PlayAssetDelivery.Editor
 		    return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks(textureCompressionFormat, buildPath));
 	    }
 
-	    internal static AssetPackBundle[] GetBundles(string path)
+	    internal static AssetPackBundle[] GetBundles(string path, SearchOption searchOption = SearchOption.TopDirectoryOnly)
 	    {
-		    return Directory.GetFiles(path)
+		    return Directory.GetFiles(path, "*.bundle", searchOption)
 			    .Select(file => new AssetPackBundle(file, GetAssetPackGroupSchema(file)))
 			    .Where(pack => pack.IsValid)
 			    .ToArray();
