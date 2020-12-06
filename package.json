@@ -1,6 +1,6 @@
 {
   "name": "be.khepri.play.assetdelivery.addressables",
-  "version": "1.0.0-rc2",
+  "version": "1.0.0-rc3",
   "displayName": "Google Play Asset Delivery - Addressables",
   "description": "Provide addressables with support for Play Asset Delivery",
   "unity": "2018.6",
