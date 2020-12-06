@@ -1,21 +1,42 @@
 # Play Asset Delivery - Addressables
+[![openupm](https://img.shields.io/npm/v/be.khepri.play.assetdelivery.addressables?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/be.khepri.pad-addressables/)
 
 In short this package provides support for Googles' Play Asset Delivery (https://developer.android.com/guide/app-bundle/asset-delivery) to Addressables.
 
 ## Installation
 
-To start you will need to add the package to your project. You can do this via the `Package Manager` or by manually editing the `manifest.json`
+Before adding the package to your project you will need to have the google registry added, you can do this by editing the `manifest.json`
+```
+  "scopedRegistries": [
+    {
+      "name": "Game Package Registry by Google",
+      "url": "https://unityregistry-pa.googleapis.com",
+      "scopes": [
+        "com.google"
+      ]
+    }
+  ]
+```
+
+Next you can add the package to your project via the `OpenUPM`, the `Package Manager` or by manually editing the `manifest.json`
+
+### Via OpenUPM
+
+1. https://openupm.com/docs/getting-started
+2. `openupm add be.khepri.play.assetdelivery.addressables -f`
+
+note: `-f` is required as `openupm` can not install dependencies which are in a different scopedRegistry. 
 
 ### Via Package Manager
 
 1. Press ` + `
 2. Select `Add package from git URL...` 
-3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc1`
+3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc2`
 
 ### Via manifest.json
 
 ```json
-   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc1",
+   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc2",
 ```
 
 ##  Configure Groups
