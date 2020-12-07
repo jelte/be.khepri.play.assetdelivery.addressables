@@ -122,10 +122,16 @@ namespace Khepri.PlayAssetDelivery.Editor
 		{
 			return AddressableAssetSettingsDefaultObject.Settings.groups
 				.Where(group => group.HasSchema<AssetPackGroupSchema>())
-				.Where(group => Path.GetFileName(bundle).StartsWith(group.Name.ToLower()))
+				.Where(group => Path.GetFileName(bundle).StartsWith(FormatGroupName(group)))
 				.Select(group => group.GetSchema<AssetPackGroupSchema>())
 				.FirstOrDefault();
 		}
+
+	    private static string FormatGroupName(AddressableAssetGroup assetGroup)
+	    {
+		    // Keep in sync with Library/PackageCache/com.unity.addressables@x.x.x/Editor/Build/DataBuilders/BuildScriptPackedMode.cs#819
+		    return assetGroup.Name.Replace(" ", "").Replace('\\', '/').Replace("//", "/").ToLower();
+	    }
 
 		private static void WriteAssetPackConfig(IEnumerable<AssetPackBundle> packBundles)
 		{
