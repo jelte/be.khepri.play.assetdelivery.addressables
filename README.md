@@ -112,4 +112,7 @@ with
 
 ## Questions, Bugs, Feature requests
 
-Please for any of these create a issue on the github repository at https://github.com/jelte/be.khepri.play.assetdelivery.addressables/issues
+Please for use 
+- https://github.com/jelte/be.khepri.play.assetdelivery.addressables/discussions for any questions and feature requests
+- https://github.com/jelte/be.khepri.play.assetdelivery.addressables/issues for bugs
+
