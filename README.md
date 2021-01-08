@@ -31,12 +31,12 @@ note: `-f` is required as `openupm` can not install dependencies which are in a 
 
 1. Press ` + `
 2. Select `Add package from git URL...` 
-3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc2`
+3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc4`
 
 ### Via manifest.json
 
 ```json
-   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc2",
+   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc4",
 ```
 
 ##  Configure Groups
