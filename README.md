@@ -101,7 +101,7 @@ BuildReport buildReport = BuildPipeline.BuildPlayer(buildPlayerOptions);
 with
 ```csharp
 #if UNITY_ANDROID
-		if (!AssetPackBuilder.BuildBundleWithAssetPacks(buildPlayerOptions, EditorUserBuildSettings.androidBuildSubtarget, Addressables.BuildPath))
+		if (!AssetPackBuilder.BuildBundleWithAssetPacks(buildPlayerOptions, EditorUserBuildSettings.androidBuildSubtarget, Path.Combine( Addressables.BuildPath, "Android" )))
 		{
 			throw new Exception("BuildScript.Build Failed");
 		}
