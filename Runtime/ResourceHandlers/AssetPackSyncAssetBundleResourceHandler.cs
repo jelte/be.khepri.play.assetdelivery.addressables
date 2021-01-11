@@ -1,4 +1,5 @@
-﻿using Google.Play.AssetDelivery;
+﻿#if UNITY_EDITOR
+using Google.Play.AssetDelivery;
 using UnityEngine;
 
 namespace Khepri.AssetDelivery.ResourceHandlers
@@ -20,3 +21,4 @@ namespace Khepri.AssetDelivery.ResourceHandlers
         }
     }
 }
+#endif
