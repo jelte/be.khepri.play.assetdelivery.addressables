@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if UNITY_ANDROID
+using System.IO;
 using Google.Play.AssetDelivery;
 using UnityEngine.AddressableAssets;
 
@@ -41,3 +42,4 @@ namespace Khepri.AssetDelivery.ResourceHandlers
         }
     }
 }
+#endif
