@@ -102,7 +102,7 @@ namespace Khepri.PlayAssetDelivery.Editor
 		    {
 			    return false;
 		    }
-		    return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks(textureCompressionFormat, buildPath));
+		    return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks(textureCompressionFormat, buildPath), true);
 	    }
 
 	    internal static AssetPackBundle[] GetBundles(string path, SearchOption searchOption = SearchOption.TopDirectoryOnly)
