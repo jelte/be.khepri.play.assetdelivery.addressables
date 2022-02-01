@@ -5,8 +5,7 @@
   "description": "Provide addressables with support for Play Asset Delivery",
   "unity": "2018.6",
   "dependencies": {
-    "com.unity.addressables": "1.8.4",
-    "com.google.play.assetdelivery": "1.2.0"
+    "com.unity.addressables": "1.8.4"
   },
   "author": {
     "name": "Jelte Steijaert",

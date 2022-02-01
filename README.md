@@ -5,18 +5,7 @@ In short this package provides support for Googles' Play Asset Delivery (https:/
 
 ## Installation
 
-Before adding the package to your project you will need to have the google registry added, you can do this by editing the `manifest.json`
-```
-  "scopedRegistries": [
-    {
-      "name": "Game Package Registry by Google",
-      "url": "https://unityregistry-pa.googleapis.com",
-      "scopes": [
-        "com.google"
-      ]
-    }
-  ]
-```
+Before adding the package to your project you will need to install Google's Play Asset Delivery Package from https://github.com/google/play-unity-plugins/releases
 
 Next you can add the package to your project via the `OpenUPM`, the `Package Manager` or by manually editing the `manifest.json`
 
@@ -31,12 +20,12 @@ note: `-f` is required as `openupm` can not install dependencies which are in a 
 
 1. Press ` + `
 2. Select `Add package from git URL...` 
-3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc5`
+3. url: `https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0`
 
 ### Via manifest.json
 
 ```json
-   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0-rc5",
+   "be.khepri.play.assetdelivery.addressables": "https://github.com/jelte/be.khepri.play.assetdelivery.addressables.git#1.0.0",
 ```
 
 ##  Configure Groups
