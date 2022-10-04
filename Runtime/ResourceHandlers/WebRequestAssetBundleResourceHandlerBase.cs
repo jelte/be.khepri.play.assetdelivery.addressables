@@ -38,7 +38,7 @@ namespace Khepri.AssetDelivery.ResourceHandlers
             if (Options.RedirectLimit > 0)
                 webRequest.redirectLimit = Options.RedirectLimit;
 #if !UNITY_2019_3_OR_NEWER
-            webRequest.chunkedTransfer = options.ChunkedTransfer;
+            webRequest.chunkedTransfer = Options.ChunkedTransfer;
 #endif
             if (m_ProvideHandle.ResourceManager.CertificateHandlerInstance != null)
             {
