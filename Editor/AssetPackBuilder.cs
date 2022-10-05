@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Debug = UnityEngine.Debug;
 
 namespace Khepri.PlayAssetDelivery.Editor
@@ -26,7 +27,11 @@ namespace Khepri.PlayAssetDelivery.Editor
 		    var profileId = settings.activeProfileId;
 		    var value = profileSettings.GetValueByName(profileId, AddressableAssetSettings.kLocalBuildPath);
 
-		    return profileSettings.EvaluateString(profileId, value);
+		    var result = profileSettings.EvaluateString(profileId, value);
+		    
+		    if (string.IsNullOrEmpty(result))
+			    result = Addressables.BuildPath;
+		    return result;
 	    }
 
 	    /**
