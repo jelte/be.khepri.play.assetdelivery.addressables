@@ -76,6 +76,7 @@ namespace Khepri.AssetDelivery.Operations
                     .FirstOrDefault();
                 Debug.LogFormat("[{0}.{1}] errorCode={2}", nameof(DownloadSizeAsyncOperation), nameof(OnGetPackDownloadSize), errorCode);
                 Complete(AsyncOperationStatus.Failed, new Exception($"Failed to retrieve pending assetPack size {errorCode}"));
+                return;
             }
             Result = assetPackSizeOperations.Sum(operation => operation.GetResult());
             Debug.LogFormat("[{0}.{1}] downloadSize={2}", nameof(DownloadSizeAsyncOperation), nameof(OnGetPackDownloadSize), Result);
