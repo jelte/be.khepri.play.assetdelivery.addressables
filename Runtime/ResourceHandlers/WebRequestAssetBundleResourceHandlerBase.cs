@@ -40,12 +40,18 @@ namespace Khepri.AssetDelivery.ResourceHandlers
 #if !UNITY_2019_3_OR_NEWER
             webRequest.chunkedTransfer = Options.ChunkedTransfer;
 #endif
+            m_ProvideHandle.SetProgressCallback(()=> GetDownloadProgress(webRequest));
             if (m_ProvideHandle.ResourceManager.CertificateHandlerInstance != null)
             {
                 webRequest.certificateHandler = m_ProvideHandle.ResourceManager.CertificateHandlerInstance;
                 webRequest.disposeCertificateHandlerOnDispose = false;
             }
             return webRequest;
+        }
+
+        float GetDownloadProgress(UnityWebRequest webRequest)
+        {
+            return webRequest.isDone ? 1f : webRequest.downloadProgress;
         }
 
         protected void WebRequestOperationCompleted(AsyncOperation op)
