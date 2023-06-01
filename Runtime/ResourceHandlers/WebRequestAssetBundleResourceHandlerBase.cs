@@ -53,8 +53,13 @@ namespace Khepri.AssetDelivery.ResourceHandlers
         {
             if (webRequest == null)
                 return 0;
-                
+
             return webRequest.isDone ? 1f : webRequest.downloadProgress;
+        }
+
+        protected void SetWebRequest(UnityWebRequest request)
+        {
+            webRequest = request;
         }
 
         protected void WebRequestOperationCompleted(AsyncOperation op)

@@ -19,6 +19,7 @@ namespace Khepri.AssetDelivery.ResourceHandlers
 
         private void OnQueueOperationCompleted(UnityWebRequestAsyncOperation asyncOp)
         {
+            SetWebRequest(asyncOp.webRequest);
             m_RequestOperation = asyncOp;
             if (m_RequestOperation.isDone)
             {
