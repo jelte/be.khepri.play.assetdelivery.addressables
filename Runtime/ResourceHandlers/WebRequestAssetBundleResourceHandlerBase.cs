@@ -8,6 +8,7 @@ namespace Khepri.AssetDelivery.ResourceHandlers
     public abstract class WebRequestAssetBundleResourceHandlerBase : AssetBundleResourceHandlerBase
     {
         private int m_retries;
+        private UnityWebRequest webRequest;
 
         protected override bool IsValidPath(string path)
         {
@@ -29,7 +30,7 @@ namespace Khepri.AssetDelivery.ResourceHandlers
             if (Options == null)
                 return UnityWebRequestAssetBundle.GetAssetBundle(url);
 
-            var webRequest = !string.IsNullOrEmpty(Options.Hash) ?
+            webRequest = !string.IsNullOrEmpty(Options.Hash) ?
                 UnityWebRequestAssetBundle.GetAssetBundle(url, Hash128.Parse(Options.Hash), Options.Crc) :
                 UnityWebRequestAssetBundle.GetAssetBundle(url, Options.Crc);
 
@@ -46,6 +47,19 @@ namespace Khepri.AssetDelivery.ResourceHandlers
                 webRequest.disposeCertificateHandlerOnDispose = false;
             }
             return webRequest;
+        }
+
+        protected override float PercentComplete()
+        {
+            if (webRequest == null)
+                return 0;
+
+            return webRequest.isDone ? 1f : webRequest.downloadProgress;
+        }
+
+        protected void SetWebRequest(UnityWebRequest request)
+        {
+            webRequest = request;
         }
 
         protected void WebRequestOperationCompleted(AsyncOperation op)

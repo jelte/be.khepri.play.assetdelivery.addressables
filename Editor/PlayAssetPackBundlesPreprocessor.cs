@@ -37,6 +37,14 @@ public class PlayAssetPackBundlesPreprocessor : BuildPlayerProcessor
             UDebug.Log($"[{nameof(PlayAssetPackBundlesPreprocessor)}.{nameof(PrepareForBuild)}] No bundles removed.");
             return;
         }
+        
+#if PAD_DELETE_BUNDLE_POST_BUILD
+        DeleteBundles(bundles);
+#endif
+    }
+
+    void DeleteBundles(AssetPackBundle[] bundles)
+    {
         foreach (var bundle in bundles)
         {
             bundle.DeleteFile();
