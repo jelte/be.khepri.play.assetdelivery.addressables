@@ -5,6 +5,7 @@ using Google.Android.AppBundle.Editor;
 using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
+using TextureCompressionFormat = Google.Android.AppBundle.Editor.TextureCompressionFormat;
 
 namespace Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas
 {
@@ -27,7 +28,7 @@ namespace Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas
                 }
             };
         }
-        
+
         /// <inheritdoc/>
         public override void OnGUIMultiple(List<AddressableAssetGroupSchema> otherSchemas)
         {
@@ -41,7 +42,7 @@ namespace Khepri.PlayAssetDelivery.Editor.Settings.GroupSchemas
             if (EditorGUI.EndChangeCheck())
             {
                 foreach (var s in otherSchemas)
-                    ((AssetPackGroupSchema) s).m_DeliveryMode = m_DeliveryMode;
+                    ((AssetPackGroupSchema)s).m_DeliveryMode = m_DeliveryMode;
             }
             EditorGUI.showMixedValue = false;
 
