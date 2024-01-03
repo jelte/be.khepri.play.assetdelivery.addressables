@@ -1,13 +1,14 @@
 ﻿using Google.Android.AppBundle.Editor;
 using Google.Android.AppBundle.Editor.Internal;
 using UnityEditor;
+using TextureCompressionFormat = Google.Android.AppBundle.Editor.TextureCompressionFormat;
 
 namespace Khepri.PlayAssetDelivery.Editor
 {
     public class AssetPackBuilderMenu
     {
         private const string CreateAction = "Create config for Addressables Groups";
-        
+
         [MenuItem(GoogleEditorMenu.MainMenuName + "/" + CreateAction, false, 101)]
         public static void CreateConfig()
         {

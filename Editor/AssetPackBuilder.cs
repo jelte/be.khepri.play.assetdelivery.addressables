@@ -13,31 +13,32 @@ using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Debug = UnityEngine.Debug;
+using TextureCompressionFormat = Google.Android.AppBundle.Editor.TextureCompressionFormat;
 
 namespace Khepri.PlayAssetDelivery.Editor
 {
-    public class AssetPackBuilder
-    {
-	    public static string BuildPath => "Library/be.khepri.play/StreamingAssetsCopy/";
+	public class AssetPackBuilder
+	{
+		public static string BuildPath => "Library/be.khepri.play/StreamingAssetsCopy/";
 
-	    public static string GetLocalBuildPath()
-	    {
-		    var settings = AddressableAssetSettingsDefaultObject.Settings;
-		    var profileSettings = settings.profileSettings;
-		    var profileId = settings.activeProfileId;
-		    var value = profileSettings.GetValueByName(profileId, AddressableAssetSettings.kLocalBuildPath);
+		public static string GetLocalBuildPath()
+		{
+			var settings = AddressableAssetSettingsDefaultObject.Settings;
+			var profileSettings = settings.profileSettings;
+			var profileId = settings.activeProfileId;
+			var value = profileSettings.GetValueByName(profileId, AddressableAssetSettings.kLocalBuildPath);
 
-		    var result = profileSettings.EvaluateString(profileId, value);
-		    
-		    if (string.IsNullOrEmpty(result))
-			    result = Addressables.BuildPath;
-		    return result;
-	    }
+			var result = profileSettings.EvaluateString(profileId, value);
 
-	    /**
+			if (string.IsNullOrEmpty(result))
+				result = Addressables.BuildPath;
+			return result;
+		}
+
+		/**
 	     * Create the Play Asset Delivery configuration.
 	     */
-	    public static AssetPackConfig CreateAssetPacks(TextureCompressionFormat textureCompressionFormat, string buildPath = null)
+		public static AssetPackConfig CreateAssetPacks(TextureCompressionFormat textureCompressionFormat, string buildPath = null)
 		{
 			if (string.IsNullOrEmpty(buildPath))
 			{
@@ -68,57 +69,57 @@ namespace Khepri.PlayAssetDelivery.Editor
 				File.Copy(bundle.Bundle, bundlePath);
 				assetPackConfig.AssetPacks.Add(bundle.Name, bundle.CreateAssetPack(textureCompressionFormat, bundlePath));
 			}
-			
+
 			WriteAssetPackConfig(bundles);
 			AssetPackConfigSerializer.SaveConfig(assetPackConfig);
 			return assetPackConfig;
 		}
 
-	    public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, MobileTextureSubtarget mobileTextureSubtarget, string buildPath)
-	    {
-		    TextureCompressionFormat textureCompressionFormat = ToTextureCompressionFormat(mobileTextureSubtarget); 
-		    return BuildBundleWithAssetPacks(buildPlayerOptions, textureCompressionFormat, buildPath);
-	    }
+		public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, MobileTextureSubtarget mobileTextureSubtarget, string buildPath)
+		{
+			TextureCompressionFormat textureCompressionFormat = ToTextureCompressionFormat(mobileTextureSubtarget);
+			return BuildBundleWithAssetPacks(buildPlayerOptions, textureCompressionFormat, buildPath);
+		}
 
-	    public static TextureCompressionFormat ToTextureCompressionFormat(MobileTextureSubtarget mobileTextureSubtarget)
-	    {
-		    switch (mobileTextureSubtarget)
-		    {
-			    case MobileTextureSubtarget.Generic:
-				    return TextureCompressionFormat.Default;
-			    case MobileTextureSubtarget.DXT:
-				    return TextureCompressionFormat.Dxt1;
-			    case MobileTextureSubtarget.PVRTC:
-				    return TextureCompressionFormat.Pvrtc;
-			    case MobileTextureSubtarget.ETC:
-				    return TextureCompressionFormat.Etc1;
-			    case MobileTextureSubtarget.ETC2:
-				    return TextureCompressionFormat.Etc2;
-			    case MobileTextureSubtarget.ASTC:
-				    return TextureCompressionFormat.Astc;
-			    default:
-				    throw new ArgumentOutOfRangeException(nameof(mobileTextureSubtarget), mobileTextureSubtarget, null);
-		    }
-	    }
-	    
-	    public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, TextureCompressionFormat textureCompressionFormat, string buildPath)
-	    {
-		    if (buildPlayerOptions.target != BuildTarget.Android)
-		    {
-			    return false;
-		    }
-		    return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks(textureCompressionFormat, buildPath), true);
-	    }
+		public static TextureCompressionFormat ToTextureCompressionFormat(MobileTextureSubtarget mobileTextureSubtarget)
+		{
+			switch (mobileTextureSubtarget)
+			{
+				case MobileTextureSubtarget.Generic:
+					return TextureCompressionFormat.Default;
+				case MobileTextureSubtarget.DXT:
+					return TextureCompressionFormat.Dxt1;
+				case MobileTextureSubtarget.PVRTC:
+					return TextureCompressionFormat.Pvrtc;
+				case MobileTextureSubtarget.ETC:
+					return TextureCompressionFormat.Etc1;
+				case MobileTextureSubtarget.ETC2:
+					return TextureCompressionFormat.Etc2;
+				case MobileTextureSubtarget.ASTC:
+					return TextureCompressionFormat.Astc;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(mobileTextureSubtarget), mobileTextureSubtarget, null);
+			}
+		}
 
-	    internal static AssetPackBundle[] GetBundles(string path, SearchOption searchOption = SearchOption.TopDirectoryOnly)
-	    {
-		    return Directory.GetFiles(path, "*.bundle", searchOption)
-			    .Select(file => new AssetPackBundle(file, GetAssetPackGroupSchema(file)))
-			    .Where(pack => pack.IsValid)
-			    .ToArray();
-	    }
+		public static bool BuildBundleWithAssetPacks(BuildPlayerOptions buildPlayerOptions, TextureCompressionFormat textureCompressionFormat, string buildPath)
+		{
+			if (buildPlayerOptions.target != BuildTarget.Android)
+			{
+				return false;
+			}
+			return AppBundlePublisher.Build(buildPlayerOptions, CreateAssetPacks(textureCompressionFormat, buildPath), true);
+		}
 
-	    /**
+		internal static AssetPackBundle[] GetBundles(string path, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+		{
+			return Directory.GetFiles(path, "*.bundle", searchOption)
+				.Select(file => new AssetPackBundle(file, GetAssetPackGroupSchema(file)))
+				.Where(pack => pack.IsValid)
+				.ToArray();
+		}
+
+		/**
 	     * Determine the AssetPackGroupSchema associated with this asset bundle.
 	     * 
 	     * @param string path of the bundle
@@ -132,11 +133,11 @@ namespace Khepri.PlayAssetDelivery.Editor
 				.FirstOrDefault();
 		}
 
-	    private static string FormatGroupName(AddressableAssetGroup assetGroup)
-	    {
-		    // Keep in sync with Library/PackageCache/com.unity.addressables@x.x.x/Editor/Build/DataBuilders/BuildScriptPackedMode.cs#819
-		    return assetGroup.Name.Replace(" ", "").Replace('\\', '/').Replace("//", "/").ToLower();
-	    }
+		private static string FormatGroupName(AddressableAssetGroup assetGroup)
+		{
+			// Keep in sync with Library/PackageCache/com.unity.addressables@x.x.x/Editor/Build/DataBuilders/BuildScriptPackedMode.cs#819
+			return assetGroup.Name.Replace(" ", "").Replace('\\', '/').Replace("//", "/").ToLower();
+		}
 
 		private static void WriteAssetPackConfig(IEnumerable<AssetPackBundle> packBundles)
 		{
@@ -168,5 +169,5 @@ namespace Khepri.PlayAssetDelivery.Editor
 		{
 			AssetDatabase.DeleteAsset(AssetPackBundleConfig.PATH);
 		}
-    }
+	}
 }
